@@ -10,6 +10,4 @@ public class Greeting {
 
     @Value("${greeting.message}")
     private String message;
-
-
 }
