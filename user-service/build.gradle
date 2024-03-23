@@ -51,8 +51,11 @@ dependencies {
     //config start
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
-    //acutator
+    //actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //open feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'

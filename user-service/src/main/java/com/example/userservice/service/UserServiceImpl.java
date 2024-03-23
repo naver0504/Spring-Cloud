@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.entity.UserEntity;
 import com.example.userservice.repository.UserRepository;
@@ -30,7 +31,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private final RestTemplate restTemplate;
+    private final OrderServiceClient orderServiceClient;
+//    private final RestTemplate restTemplate;
 
 
     private static final String ORDER_SERVICE_URL = "http://ORDER-SERVICE/order-service/%s/orders";
@@ -53,9 +55,11 @@ public class UserServiceImpl implements UserService{
         final UserEntity userEntity = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Not Found User"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 
-        final List<ResponseOrder> orders = restTemplate.exchange(String.format(ORDER_SERVICE_URL, userId), HttpMethod.GET, null, new ParameterizedTypeReference<List<ResponseOrder>>() {
-        }).getBody();
+//        final List<ResponseOrder> orders = restTemplate.exchange(String.format(ORDER_SERVICE_URL, userId), HttpMethod.GET, null, new ParameterizedTypeReference<List<ResponseOrder>>() {
+//        }).getBody();
 
+
+        final List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
 
         userDto.setOrders(orders);
 

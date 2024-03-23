@@ -23,10 +23,10 @@ public class GlobalConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    @LoadBalanced
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
+//    @Bean
+//    @LoadBalanced
+//    public RestTemplate getRestTemplate() {
+//        return new RestTemplate();
+//    }
 
 }
