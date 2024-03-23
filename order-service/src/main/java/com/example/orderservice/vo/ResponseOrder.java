@@ -15,7 +15,6 @@ public class ResponseOrder {
     private int unitPrice;
     private int totalPrice;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
     private String orderId;
