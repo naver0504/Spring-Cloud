@@ -2,6 +2,9 @@ server:
   port: 0
 
 spring:
+  profiles:
+    include:
+      - dev
   application:
     name: user-service
   datasource:
@@ -21,6 +24,12 @@ spring:
       settings:
         web-allow-others: true
       path: /h2-console
+  cloud:
+   config:
+     name: config-server
+  config:
+     import: optional:configserver:http://localhost:8888
+
 
 
 
@@ -41,7 +50,15 @@ logging:
   level:
     com.example.userservice: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
 
-token:
-  expiration_time: 86400000
-  secret: mySecretKeyaffeaff924fk934f3k94f23fr0owrelg0erfl92249fk9k9fewqf9f2m34f9234mf2934f234mdi392fm4i9f2i943f924f92i4gm924ik3kf923i4rk2i934dmi
+
+
+
+#token:
+#  expiration_time: 86400000
+#  secret: mySecretKeyaffeaff924fk934f3k94f23fr0owrelg0erfl92249fk9k9fewqf9f2m34f9234mf2934f234mdi392fm4i9f2i943f924f92i4gm924ik3kf923i4rk2i934dmi

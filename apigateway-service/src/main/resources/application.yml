@@ -12,15 +12,30 @@ eureka:
 
 
 spring:
+  profiles:
+    include:
+      - prod
   application:
     name: gateway-service
+  config:
+    import: optional:configserver:http://localhost:8888
   cloud:
+    config:
+      name: ecommerce
     gateway:
       routes:
 #        - id: user-service
 #          uri: lb://USER-SERVICE
 #          predicates:
 #              - Path=/user-service/**
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=POST, GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -84,3 +99,9 @@ spring:
 
 token:
   secret: mySecretKeyaffeaff924fk934f3k94f23fr0owrelg0erfl92249fk9k9fewqf9f2m34f9234mf2934f234mdi392fm4i9f2i943f924f92i4gm924ik3kf923i4rk2i934dmi
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httpexchanges
