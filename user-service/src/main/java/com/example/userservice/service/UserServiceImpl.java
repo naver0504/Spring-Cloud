@@ -6,6 +6,8 @@ import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +30,10 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final RestTemplate restTemplate;
+
+
+    private static final String ORDER_SERVICE_URL = "http://ORDER-SERVICE/order-service/%s/orders";
 
     @Override
     @Transactional
@@ -45,7 +52,11 @@ public class UserServiceImpl implements UserService{
 
         final UserEntity userEntity = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Not Found User"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
-        final List<ResponseOrder> orders = new ArrayList<>();
+
+        final List<ResponseOrder> orders = restTemplate.exchange(String.format(ORDER_SERVICE_URL, userId), HttpMethod.GET, null, new ParameterizedTypeReference<List<ResponseOrder>>() {
+        }).getBody();
+
+
         userDto.setOrders(orders);
 
         return userDto;

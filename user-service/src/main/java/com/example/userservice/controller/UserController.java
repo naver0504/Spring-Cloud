@@ -27,10 +27,10 @@ public class UserController {
     @GetMapping("/health_check")
     public String status() {
         return String.format("It's Working in User Service"
-                + ", on LOCAL PORT +" + environment.getProperty("local.server.port")
-                + ", on SERVER PORT +" + environment.getProperty("server.port")
-                + ", token secret + " + environment.getProperty("token.secret")
-                + ", token expiration time + " + environment.getProperty("token.expiration_time")
+                + ", on LOCAL PORT = " + environment.getProperty("local.server.port")
+                + ", on SERVER PORT = " + environment.getProperty("server.port")
+                + ", token secret = " +  environment.getProperty("token.secret")
+                + ", token expiration time = " + environment.getProperty("token.expiration_time")
 
 
         );
@@ -65,10 +65,13 @@ public class UserController {
     public ResponseEntity<ResponseUser> getUser(@PathVariable String userId) {
 
         final UserDto userDto = userService.getUserByUserId(userId);
+
         final ResponseUser responseUser = modelMapper.map(userDto, ResponseUser.class);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseUser);
     }
+
+
 
 
 }
