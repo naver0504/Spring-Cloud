@@ -26,7 +26,6 @@ public class OrderEntity {
     @Column(nullable = false, unique = true)
     private String orderId;
 
-    @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
     @PrePersist
