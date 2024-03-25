@@ -32,7 +32,11 @@ public class ConsumerKafkaConfig {
         Map<String, Object> config = new HashMap<>();
         /*
         The TYPE_MAPPINGS property is used to map the type of the message to the class that should be used to deserialize it.
-        매우 중요
+        매우 중요 안하면 JSON 매핑이 안됌
+        Producer Config에서도 OrderMesssage:해당프로젝트.OrderMessage 이런식으로 매핑해줘야함
+        OrderMessage란 Producer에서 생성하는 메세지 Class 타입
+        StockUpdateMessage란 Consumer에서 받는 메세지 Class 타입
+        같은 프로젝트에서는 안 해도 되지만 다른 프로젝트에서는 해줘야함
          */
         config.put(JsonDeserializer.TYPE_MAPPINGS, "OrderMessage:com.example.catalogservice.consumer.StockUpdateMessage");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.BOOTSTRAP_SERVERS_CONFIG);
