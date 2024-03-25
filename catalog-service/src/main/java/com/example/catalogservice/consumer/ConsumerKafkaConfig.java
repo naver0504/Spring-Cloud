@@ -37,6 +37,7 @@ public class ConsumerKafkaConfig {
         OrderMessage란 Producer에서 생성하는 메세지 Class 타입
         StockUpdateMessage란 Consumer에서 받는 메세지 Class 타입
         같은 프로젝트에서는 안 해도 되지만 다른 프로젝트에서는 해줘야함
+        안할거면 String으로 발급하고 소비도 String으로 받아서 직접 매핑해줘야함
          */
         config.put(JsonDeserializer.TYPE_MAPPINGS, "OrderMessage:com.example.catalogservice.consumer.StockUpdateMessage");
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.BOOTSTRAP_SERVERS_CONFIG);
