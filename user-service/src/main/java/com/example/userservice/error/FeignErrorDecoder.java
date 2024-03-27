@@ -19,10 +19,10 @@ public class FeignErrorDecoder implements ErrorDecoder {
                 if (methodKey.contains("getOrders")) {
                     return FeignException.errorStatus(methodKey, response);
                 }
-                return new Exception(response.reason());
+                return FeignException.errorStatus(methodKey, response);
             }
             default-> {
-                return new Exception(response.reason());
+                return FeignException.errorStatus(methodKey, response);
             }
         }
         return null;
