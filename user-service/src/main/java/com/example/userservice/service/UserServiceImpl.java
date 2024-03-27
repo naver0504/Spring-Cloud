@@ -7,6 +7,7 @@ import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,7 +33,8 @@ public class UserServiceImpl implements UserService{
     private final BCryptPasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final OrderServiceClient orderServiceClient;
-//    private final RestTemplate restTemplate;
+
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
 
     private static final String ORDER_SERVICE_URL = "http://ORDER-SERVICE/order-service/%s/orders";
@@ -55,11 +57,14 @@ public class UserServiceImpl implements UserService{
         final UserEntity userEntity = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Not Found User"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 
-//        final List<ResponseOrder> orders = restTemplate.exchange(String.format(ORDER_SERVICE_URL, userId), HttpMethod.GET, null, new ParameterizedTypeReference<List<ResponseOrder>>() {
-//        }).getBody();
+//        final List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
+
+        List<ResponseOrder> orders = circuitBreakerFactory.create("circuitebreaker").run(() ->
+                        orderServiceClient.getOrders(userId)
+                , throwable -> Collections.emptyList());
 
 
-        final List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
+
 
         userDto.setOrders(orders);
 
